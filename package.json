@@ -1,0 +1,16 @@
+{
+  "name": "ps-login-proxy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Minimal proxy that forwards /action/:act to the official Pokemon Showdown loginserver via <id>.psim.us",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "scripts": {
+    "build": "echo \"no build step\"",
+    "start": "node server.js"
+  }
+}
