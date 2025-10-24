@@ -33,6 +33,29 @@ app.post("/action/:act", async (req, res) => {
   }
 });
 
+// Accept GET or POST to /action/:act
+app.all("/action/:act", async (req, res) => {
+  try {
+    const act = req.params.act;
+    const payload = req.method === "GET" ? req.query : req.body;
+    await forward(act, payload, res);
+  } catch (e) {
+    res.status(502).send("proxy error: " + (e?.message || e));
+  }
+});
+
+// Fallback: /action?act=... (or body.act)
+app.all("/action", async (req, res) => {
+  try {
+    const payload = req.method === "GET" ? req.query : req.body;
+    const act = payload.act;
+    if (!act) return res.status(400).send("missing act");
+    await forward(act, payload, res);
+  } catch (e) {
+    res.status(502).send("proxy error: " + (e?.message || e));
+  }
+});
+
 app.get("/healthz", (_req, res) => res.send("ok"));
 
 app.listen(PORT, () => console.log(`login-proxy on ${PORT} → ${UPSTREAM}`));
